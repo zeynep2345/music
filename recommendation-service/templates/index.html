@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood DJ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Albüm kapağı üzerine gelince oynat butonu çıksın */
+        .group:hover .play-btn { opacity: 1; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans min-h-screen">
+
+    <nav class="p-6 bg-black shadow-lg border-b border-gray-800 flex justify-between items-center">
+        <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500">
+            🎵 Mood DJ
+        </h1>
+        <span class="text-gray-400 text-sm">Mikroservis Mimarisi</span>
+    </nav>
+
+    <div class="container mx-auto px-4 py-10 text-center">
+        
+        <h2 class="text-2xl mb-8 font-light text-gray-300">Şu an nasıl hissediyorsun?</h2>
+
+        <form method="POST" class="flex flex-wrap justify-center gap-4 mb-12">
+            <button name="mood" value="happy" class="px-6 py-3 rounded-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold transition transform hover:scale-105">😊 Mutlu</button>
+            <button name="mood" value="chill" class="px-6 py-3 rounded-full bg-indigo-500 hover:bg-indigo-400 font-bold transition transform hover:scale-105">☕ Sakin</button>
+            <button name="mood" value="energetic" class="px-6 py-3 rounded-full bg-red-500 hover:bg-red-400 font-bold transition transform hover:scale-105">🔥 Enerjik</button>
+            <button name="mood" value="sad" class="px-6 py-3 rounded-full bg-blue-700 hover:bg-blue-600 font-bold transition transform hover:scale-105">🌧️ Hüzünlü</button>
+            <button name="mood" value="study" class="px-6 py-3 rounded-full bg-green-600 hover:bg-green-500 font-bold transition transform hover:scale-105">📚 Odaklan</button>
+        </form>
+
+        {% if error %}
+            <div class="bg-red-600 text-white p-4 rounded mb-6 w-1/2 mx-auto">⚠️ {{ error }}</div>
+        {% endif %}
+
+        {% if playlist %}
+            <div class="text-left mb-4 ml-2">
+                <span class="text-xl font-bold text-white capitalize">{{ selected_mood }}</span> modu için öneriler:
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {% for song in playlist %}
+                <div class="bg-gray-800 p-4 rounded-xl shadow-lg hover:bg-gray-700 transition group relative">
+                    <div class="relative">
+                        <img src="{{ song.image }}" class="rounded-lg w-full mb-4 shadow-md" alt="Album Cover">
+                        <div class="play-btn opacity-0 absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-lg transition duration-300 cursor-pointer">
+                            <div class="bg-green-500 rounded-full p-3 shadow-lg">
+                                <svg class="w-8 h-8 text-white fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold truncate">{{ song.title }}</h3>
+                    <p class="text-gray-400 text-sm">{{ song.artist }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        {% elif selected_mood %}
+            <div class="text-gray-500 mt-10">Bu modda henüz şarkı eklenmemiş...</div>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
