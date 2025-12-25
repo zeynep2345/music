@@ -1,29 +1,25 @@
-from flask import Flask, jsonify, request
-import random
+from flask import Flask, jsonify
 
-app = Flask(_name_)
+app = Flask(__name__)
 
-# Müzik Veritabanı (Stateless)
-# Resimler için rastgele 'picsum' servisini kullanıyoruz.
-songs = [
-    {"id": 1, "title": "Happy Vibes", "artist": "The Sunshines", "mood": "happy", "image": "https://picsum.photos/id/10/300/300"},
-    {"id": 2, "title": "Morning Coffee", "artist": "Chill Beats", "mood": "chill", "image": "https://picsum.photos/id/20/300/300"},
-    {"id": 3, "title": "Gym Power", "artist": "Fit Nation", "mood": "energetic", "image": "https://picsum.photos/id/30/300/300"},
-    {"id": 4, "title": "Sad Piano", "artist": "Melancholy", "mood": "sad", "image": "https://picsum.photos/id/40/300/300"},
-    {"id": 5, "title": "Summer Dance", "artist": "Party Maker", "mood": "happy", "image": "https://picsum.photos/id/50/300/300"},
-    {"id": 6, "title": "Focus Mode", "artist": "Brain Waves", "mood": "study", "image": "https://picsum.photos/id/60/300/300"},
-    {"id": 7, "title": "Running Fast", "artist": "Speedy", "mood": "energetic", "image": "https://picsum.photos/id/70/300/300"},
-    {"id": 8, "title": "Rainy Window", "artist": "Lofi Girl", "mood": "chill", "image": "https://picsum.photos/id/80/300/300"},
-]
+# Örnek şarkı veritabanı
+songs = {
+    "happy": [
+        {"title": "Happy", "artist": "Pharrell Williams", "image": "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=300"},
+        {"title": "Uptown Funk", "artist": "Bruno Mars", "image": "https://images.unsplash.com/photo-1514525253342-b0bb4d722967?w=300"}
+    ],
+    "sad": [
+        {"title": "Someone Like You", "artist": "Adele", "image": "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=300"},
+        {"title": "Fix You", "artist": "Coldplay", "image": "https://images.unsplash.com/photo-1445985543470-41fba5c3144a?w=300"}
+    ],
+    "energetic": [
+        {"title": "Thunderstruck", "artist": "AC/DC", "image": "https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?w=300"}
+    ]
+}
 
-@app.route('/songs', methods=['GET'])
-def get_songs():
-    mood = request.args.get('mood')
-    if mood:
-        # Python list comprehension ile filtreleme yapıyoruz
-        filtered_songs = [s for s in songs if s['mood'] == mood]
-        return jsonify(filtered_songs)
-    return jsonify(songs)
+@app.route('/songs/<mood>')
+def get_songs(mood):
+    return jsonify(songs.get(mood.lower(), []))
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)
