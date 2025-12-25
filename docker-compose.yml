@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  catalog-service:
+    build: ./catalog-service
+    container_name: music-catalog
+    ports:
+      - "5001:5001"
+    networks:
+      - mood-network
+
+  recommendation-service:
+    build: ./recommendation-service
+    container_name: music-dj
+    ports:
+      - "5002:5002"
+    depends_on:
+      - catalog-service
+    networks:
+      - mood-network
+
+networks:
+  mood-network:
+    driver: bridge
